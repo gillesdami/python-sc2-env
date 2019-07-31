@@ -1,24 +1,23 @@
 from setuptools import setup, find_packages
+from os import path
 
-from pipenv.project import Project
-from pipenv.utils import convert_deps_to_pip
-
-pfile = Project(chdir=False).parsed_pipfile
-requirements = convert_deps_to_pip(pfile['packages'], r=False)
-test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
+with open(path.join('README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
-    name = "sc2",
+    name = "sc2-env",
     packages = find_packages(),
-    version = "0.11.1",
-    description = "A StarCraft II API Client for Python 3",
+    version = "0.11.1.1",
+    description = "A StarCraft II bot gym env library over python-sc2",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     license="MIT",
-    author = "Hannes Karppila",
-    author_email = "hannes.karppila@gmail.com",
-    url = "https://github.com/Dentosal/python-sc2",
+    author = "Damien GILLES",
+    author_email = "damien.gilles.pro@gmail.com",
+    url = "https://github.com/gillesdami/python-sc2",
     keywords = ["StarCraft", "StarCraft 2", "StarCraft II", "AI", "Bot"],
-    setup_requires=["pipenv"],
-    install_requires=requirements,
+    python_requires='>=3.6',
+    install_requires=['portpicker', 'async-timeout>=3.0,<4.0', 's2clientprotocol', 'aiohttp', 'pyglet', 'gym'],
     classifiers = [
         "Development Status :: 3 - Alpha",
 

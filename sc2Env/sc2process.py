@@ -55,7 +55,8 @@ class SC2Process:
         def signal_handler(*args):
             kill_switch.kill_all()
 
-        signal.signal(signal.SIGINT, signal_handler)
+        # cannot signal out of main thread
+        # signal.signal(signal.SIGINT, signal_handler)
 
         try:
             self._process = self._launch()
@@ -69,7 +70,8 @@ class SC2Process:
 
     async def __aexit__(self, *args):
         kill_switch.kill_all()
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        # cannot signal out of main thread
+        # signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     @property
     def ws_url(self):
