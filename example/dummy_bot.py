@@ -6,6 +6,8 @@ from numpy.random import randn
 from sc2Env import Sc2Env, Race
 from sc2Env.player import Computer
 
+# Bot collecting observations against an easy Zerg computer
+
 def get_opponents():
     # return a list of opponent for our bot
     return [Computer(Race['Zerg'])]
@@ -20,7 +22,6 @@ async def observer(botAI):
     # matching the observation space and a reward
     observation = randn(2,2)
     reward = 0
-
     return observation, reward
 
 async def actuator(botAI, action):
@@ -33,7 +34,13 @@ async def actuator(botAI, action):
 
 env = Sc2Env('KingsCoveLE', 'Zerg', get_opponents, 
     initializer, observer, actuator, game_time_limit=60)
+
 done = False
 
-while not done:
-    observation, reward, done, _ = env.step(randn(3,3))
+for i in range(3):
+    observation = env.reset()
+    while not done:
+        observation, reward, done, _ = env.step(randn(3,3))
+
+env.close()
+print('END')

@@ -43,21 +43,20 @@ class Sc2Env(gym.Env):
         run_game(self.map, players, realtime=False, **self.kwargs)
 
     def reset(self):
-        if self.thread and self.env_pipe:
-            self.env_pipe.send(None)
-            self.thread.join()
+        self.close()
         
         self.env_pipe, self.runner_pipe = Pipe(True)
-        self.thread = Thread(target=self._run_game).start()
+        self.thread = Thread(target=self._run_game)
+        self.thread.start()
         
         logger.info("waiting Sc2Bot spaces")
-        select([self.env_pipe], [], [], 60)
+        select([self.env_pipe], [], [], 10)
         self.action_space, self.observation_space = self.env_pipe.recv()
 
         logger.debug("waiting Sc2Bot observation")
-        select([self.env_pipe], [], [], 60)
+        select([self.env_pipe], [], [], 10)
         self.observation, self.reward = self.env_pipe.recv()
-
+        
         return self.observation
 
     def step(self, action):
@@ -72,3 +71,8 @@ class Sc2Env(gym.Env):
             self.observation, self.reward =  msg
 
         return self.observation, self.reward, done, {}
+
+    def close(self):
+        if self.env_pipe and self.thread:
+            self.env_pipe.send(None)
+            self.thread.join()

@@ -7,7 +7,7 @@ with open(path.join('README.md'), encoding='utf-8') as f:
 setup(
     name = "sc2-env",
     packages = find_packages(),
-    version = "0.11.1.1",
+    version = "0.11.1.2",
     description = "A StarCraft II bot gym env library over python-sc2",
     long_description=long_description,
     long_description_content_type='text/markdown',
